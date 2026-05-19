@@ -1,6 +1,6 @@
 # Orator Lab 🎙️🔬
 
-Orator Lab is an AI-powered speech analysis and refinement platform designed to bridge the gap between a speaker's intent and the audience's reality. By breaking down transcripts, identifying delivery blind spots, and evaluating audience resonance, Orator Lab helps speakers transform rigid lectures into impactful, empathetic communication.
+Orator Lab is a specialized speech refinement interface designed to transform raw rhetorical data into actionable delivery blueprints. Built for speech coaches, communication strategists, and executives, the platform maps complex thematic critiques into structured, empathetic public speaking frameworks.
 
 ## 🚀 The Core Philosophy
 Great speaking isn't just about flawless delivery; it's about audience alignment. Orator Lab analyzes speech drafts or past performances to detect where a speaker might be disconnecting from their listeners—whether through a power imbalance, over-indexing on individual burden, or dismissing rational anxieties.
@@ -33,25 +33,42 @@ To understand Orator Lab's analytical engine, look at how it deconstructs and pr
 
 Orator Lab leverages **NotebookLM** as its core analytical synthesis engine, transforming raw audio transcripts and source documents into structured rhetorical insights.
 
-[Raw Speech Audio/Transcript] 
-             │
-             ▼
-┌───────────────────────────┐
-│       NotebookLM          │  ◄── Extracts core themes, blind spots, 
-└────────────┬──────────────┘      and audience disconnects
-             │
-             ▼  [Raw Synthesized Insights]
-┌───────────────────────────┐
-│       Orator Lab          │  ◄── Maps insights to rhetorical frameworks
-└────────────┬──────────────┘      and generates actionable delivery pivots
-             │
-             ▼
-[Refined, High-Impact Speech Blueprint]
+## 🛠️ The Workflow: NotebookLM ➔ Orator Lab
 
-### Why NotebookLM + Orator Lab?
-While NotebookLM is world-class at digesting massive context and finding deep thematic contradictions within a transcript, **Orator Lab** acts as the specialized translator for speakers. It takes NotebookLM's raw conceptual insights and automatically maps them into four distinct tactical buckets:
+Orator Lab uses a human-in-the-loop data pipeline that pairs the deep synthesis capabilities of NotebookLM with a tailored, speech-centric presentation layer.
 
-*   **Accountability Alignment:** Shifting tone from top-down lecturing to shared partnership.
-*   **Anxiety Validation:** Filtering out data-cold or "algorithmic" brush-offs of valid human fears.
-*   **Power Dynamics Check:** Identifying language that sounds intimidating rather than empowering.
-*   **Narrative Flattening:** Transforming rigid, elitist frameworks into open, collaborative calls-to-action.
+ ┌────────────────────────────────────────┐
+ │ 1. Source Ingestion (NotebookLM)       │ -> Drop transcripts, video audio, or source
+ └───────────────────┬────────────────────┘    materials into a NotebookLM source folder.
+                     │
+                     ▼
+ ┌────────────────────────────────────────┐
+ │ 2. Deep Synthesis (NotebookLM)         │ -> Generate deep thematic notes, identifying
+ └───────────────────┬────────────────────┘    audience blind spots and tonal friction.
+                     │
+                     ▼  [Export / Copy Notes]
+ ┌────────────────────────────────────────┐
+ │ 3. Structure & Pivot (Orator Lab)      │ -> Paste raw notes into Orator Lab. The app
+ └───────────────────┬────────────────────┘    instantly maps them into actionable adjustments.
+                     │
+                     ▼
+ ┌────────────────────────────────────────┐
+ │ 4. Refined Speech Blueprint            │ -> Output a scannable, side-by-side view of
+ └────────────────────────────────────────┘    "The Disconnect" vs. "The Empathetic Pivot".
+
+## ✨ Key Interface Features
+
+*   **Zero-Config Ingestion Pasteboard:** A clean, markdown-aware input area built to accept raw markdown exports directly from your NotebookLM study guides or chat logs.
+*   **Rhetorical Category Mapping:** Automatically categorizes messy, long-form analytical notes into four core communication pillars:
+    *   *Accountability Realignment* (Is the speaker lecturing or partnering?)
+    *   *Anxiety Validation* (Is the speaker dismissing real fears with sterile data?)
+    *   *Power Dynamics Balancing* (Is the language empowering or intimidating?)
+    *   *Narrative Democratization* (Is the framing elitist or collaborative?)
+*   **Before/After Split View:** Displays the exact moment of audience friction alongside a concrete rewrite suggestion, making it trivial for a speaker to rebuild their script.
+
+## 🚀 Getting Started
+
+1. Analyze your target speech video or transcript inside **NotebookLM**.
+2. Run a prompt to isolate audience friction points (e.g., *"Identify where the speaker's tone alienates the audience"*).
+3. Copy the exported notes, open **Orator Lab**, and paste them into the analyzer workspace.
+4. Export your structured, high-impact speech blueprint.
