@@ -66,6 +66,22 @@ Orator Lab uses a human-in-the-loop data pipeline that pairs the deep synthesis 
     *   *Narrative Democratization* (Is the framing elitist or collaborative?)
 *   **Before/After Split View:** Displays the exact moment of audience friction alongside a concrete rewrite suggestion, making it trivial for a speaker to rebuild their script.
 
+## 🌐 Web app & GitHub Pages
+
+The home page and interactive workspace live in this repo as a static Vite + React app.
+
+```bash
+npm install
+npm run dev      # local preview at http://localhost:5173/orator-lab/
+npm run build    # output in dist/
+```
+
+**Deploy:** Push to `main`. The [Deploy to GitHub Pages](.github/workflows/deploy.yml) workflow builds and publishes automatically. In the repo **Settings → Pages**, set **Source** to **GitHub Actions**.
+
+Site URL (project page): `https://<username>.github.io/orator-lab/`
+
+Workspace UI decisions are documented in [docs/lessons-learned-workspace-ui.md](docs/lessons-learned-workspace-ui.md).
+
 ## 🚀 Getting Started
 
 1. Analyze your target speech video or transcript inside **NotebookLM**.
