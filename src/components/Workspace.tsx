@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  CASE_VIDEO,
-  IMPROVEMENTS,
-  TRANSCRIPT,
-  VIDEO_START_SECONDS,
+  getCaseById,
+  loadCaseId,
+  saveCaseId,
+  videoStartSeconds,
   type TranscriptSegment,
-} from "../data/schmidtExample";
+} from "../data/cases";
 import { useYouTubePlayer } from "../hooks/useYouTubePlayer";
 import { segmentAtTime } from "../lib/segmentAtTime";
 import { videoOrderIndex } from "../lib/transcriptOrder";
 import { AnalysisPanel } from "./workspace/AnalysisPanel";
+import { CaseSelector } from "./workspace/CaseSelector";
 import { ImportNotesPanel } from "./workspace/ImportNotesPanel";
 import {
   MobileWorkspaceTabs,
@@ -30,8 +31,12 @@ function paneClass(tab: WorkspaceTab, pane: WorkspaceTab) {
 const SYNC_SUPPRESS_MS = 900;
 
 export function Workspace() {
+  const [caseId, setCaseId] = useState(loadCaseId);
+  const activeCase = useMemo(() => getCaseById(caseId), [caseId]);
+  const startSeconds = videoStartSeconds(activeCase);
+
   const [activeId, setActiveId] = useState<string>(() =>
-    segmentAtTime(VIDEO_START_SECONDS, TRANSCRIPT).id,
+    segmentAtTime(startSeconds, activeCase.transcript).id,
   );
   const [mobileTab, setMobileTab] = useState<WorkspaceTab>("watch");
   const [importOpen, setImportOpen] = useState(false);
@@ -39,27 +44,38 @@ export function Workspace() {
   const suppressSyncRef = useRef(false);
   const suppressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handlePlaybackTime = useCallback((seconds: number) => {
-    if (suppressSyncRef.current) return;
-    const seg = segmentAtTime(seconds, TRANSCRIPT);
-    setActiveId((current) => (current === seg.id ? current : seg.id));
-  }, []);
+  useEffect(() => {
+    saveCaseId(caseId);
+    window.history.replaceState(null, "", `#workspace?case=${caseId}`);
+    const seg = segmentAtTime(startSeconds, activeCase.transcript);
+    setActiveId(seg.id);
+    setMobileTab("watch");
+  }, [caseId, activeCase, startSeconds]);
+
+  const handlePlaybackTime = useCallback(
+    (seconds: number) => {
+      if (suppressSyncRef.current) return;
+      const seg = segmentAtTime(seconds, activeCase.transcript);
+      setActiveId((current) => (current === seg.id ? current : seg.id));
+    },
+    [activeCase.transcript],
+  );
 
   const { containerRef, seekTo } = useYouTubePlayer(
-    CASE_VIDEO.youtubeId,
-    VIDEO_START_SECONDS,
-    CASE_VIDEO.durationSeconds,
+    activeCase.video.youtubeId,
+    startSeconds,
+    activeCase.video.durationSeconds,
     handlePlaybackTime,
   );
 
   const activeIndex = useMemo(
-    () => videoOrderIndex(activeId),
-    [activeId],
+    () => videoOrderIndex(activeId, activeCase.transcript),
+    [activeId, activeCase.transcript],
   );
 
   const activeImprovement = useMemo(
-    () => IMPROVEMENTS.find((i) => i.segmentId === activeId),
-    [activeId],
+    () => activeCase.improvements.find((i) => i.segmentId === activeId),
+    [activeCase.improvements, activeId],
   );
 
   useEffect(() => {
@@ -116,15 +132,21 @@ export function Workspace() {
 
         <ImportNotesPanel open={importOpen} onClose={() => setImportOpen(false)} />
 
+        <CaseSelector activeCase={activeCase} onChange={setCaseId} />
+
         <MobileWorkspaceTabs active={mobileTab} onChange={setMobileTab} />
 
         <div className="mb-4">
           <ReadModeToggle readOnly={readOnly} onChange={setReadOnly} />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(280px,320px)] lg:gap-5 xl:gap-6">
+        <div
+          key={activeCase.id}
+          className="grid gap-6 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(280px,320px)] lg:gap-5 xl:gap-6"
+        >
           <div className={`${paneClass(mobileTab, "watch")} lg:sticky lg:top-20 lg:self-start`}>
             <VideoColumn
+              caseStudy={activeCase}
               playerContainerRef={containerRef}
               activeId={activeId}
               onSelectSegment={selectSegment}
@@ -133,6 +155,7 @@ export function Workspace() {
 
           <div className={paneClass(mobileTab, "read")}>
             <TranscriptPanel
+              segments={activeCase.transcript}
               activeId={activeId}
               onSelect={handleTranscriptSelect}
             />
@@ -142,7 +165,7 @@ export function Workspace() {
             <AnalysisPanel
               improvement={activeImprovement}
               activeIndex={activeIndex}
-              total={TRANSCRIPT.length}
+              total={activeCase.transcript.length}
             />
           </div>
         </div>

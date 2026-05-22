@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
-import type { Improvement } from "../../data/schmidtExample";
-import { PILLARS, type PillarId } from "../../data/schmidtExample";
+import { PILLARS, type Improvement, type PillarId } from "../../data/cases";
 
 interface AnalysisPanelProps {
   improvement: Improvement | undefined;
