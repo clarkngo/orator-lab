@@ -1,21 +1,22 @@
 import type { RefObject } from "react";
-import {
-  CASE_VIDEO,
-  type TranscriptSegment,
-} from "../../data/schmidtExample";
+import type { CaseStudy, TranscriptSegment } from "../../data/cases";
 import { IssueRail } from "./IssueRail";
 
 interface VideoColumnProps {
+  caseStudy: CaseStudy;
   playerContainerRef: RefObject<HTMLDivElement | null>;
   activeId: string;
   onSelectSegment: (segment: TranscriptSegment) => void;
 }
 
 export function VideoColumn({
+  caseStudy,
   playerContainerRef,
   activeId,
   onSelectSegment,
 }: VideoColumnProps) {
+  const { video } = caseStudy;
+
   return (
     <div className="flex flex-col">
       <div className="overflow-hidden rounded-xl border border-border bg-surface">
@@ -23,11 +24,23 @@ export function VideoColumn({
           <div ref={playerContainerRef} className="h-full w-full" />
         </div>
         <div className="border-t border-border px-4 py-3">
-          <p className="font-medium text-text">{CASE_VIDEO.title}</p>
-          <p className="text-sm text-text-muted">{CASE_VIDEO.subtitle}</p>
+          <p className="font-medium text-text">{video.title}</p>
+          <p className="text-sm text-text-muted">{video.subtitle}</p>
+          <a
+            href={video.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-block text-xs text-accent hover:underline"
+          >
+            Watch on YouTube ↗
+          </a>
         </div>
       </div>
-      <IssueRail activeId={activeId} onSelect={onSelectSegment} />
+      <IssueRail
+        segments={caseStudy.transcript}
+        activeId={activeId}
+        onSelect={onSelectSegment}
+      />
     </div>
   );
 }

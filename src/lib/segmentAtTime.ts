@@ -1,4 +1,4 @@
-import type { TranscriptSegment } from "../data/schmidtExample";
+import type { TranscriptSegment } from "../data/types";
 
 /** Map playback position to the active friction-point segment. */
 export function segmentAtTime(

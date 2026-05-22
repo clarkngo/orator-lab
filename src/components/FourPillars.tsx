@@ -1,4 +1,4 @@
-import { PILLARS, type PillarId } from "../data/schmidtExample";
+import { PILLARS, type PillarId } from "../data/cases";
 
 const PILLAR_ORDER: PillarId[] = [
   "accountability",

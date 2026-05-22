@@ -1,14 +1,19 @@
 import { useEffect, useMemo, useRef } from "react";
-import { PILLARS, type TranscriptSegment } from "../../data/schmidtExample";
+import { PILLARS, type TranscriptSegment } from "../../data/cases";
 import { transcriptInVideoOrder } from "../../lib/transcriptOrder";
 
 interface TranscriptPanelProps {
+  segments: readonly TranscriptSegment[];
   activeId: string;
   onSelect: (segment: TranscriptSegment) => void;
 }
 
-export function TranscriptPanel({ activeId, onSelect }: TranscriptPanelProps) {
-  const segments = useMemo(() => transcriptInVideoOrder(), []);
+export function TranscriptPanel({
+  segments,
+  activeId,
+  onSelect,
+}: TranscriptPanelProps) {
+  const ordered = useMemo(() => transcriptInVideoOrder(segments), [segments]);
   const activeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -31,7 +36,7 @@ export function TranscriptPanel({ activeId, onSelect }: TranscriptPanelProps) {
         aria-label="Speech transcript"
       >
         <p className="text-base leading-[1.85] text-text-muted">
-          {segments.map((seg, index) => {
+          {ordered.map((seg, index) => {
             const isActive = seg.id === activeId;
             const pillar = PILLARS[seg.pillar];
             return (
@@ -63,7 +68,7 @@ export function TranscriptPanel({ activeId, onSelect }: TranscriptPanelProps) {
                 >
                   {seg.text}
                 </button>
-                {index < segments.length - 1 ? " " : null}
+                {index < ordered.length - 1 ? " " : null}
               </span>
             );
           })}

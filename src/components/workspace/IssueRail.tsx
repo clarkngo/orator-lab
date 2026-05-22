@@ -1,17 +1,18 @@
-import { PILLARS, type TranscriptSegment } from "../../data/schmidtExample";
+import { PILLARS, type TranscriptSegment } from "../../data/cases";
 import {
   transcriptInVideoOrder,
   videoOrderIndex,
 } from "../../lib/transcriptOrder";
 
 interface IssueRailProps {
+  segments: readonly TranscriptSegment[];
   activeId: string;
   onSelect: (segment: TranscriptSegment) => void;
 }
 
-export function IssueRail({ activeId, onSelect }: IssueRailProps) {
-  const segments = transcriptInVideoOrder();
-  const activeIndex = videoOrderIndex(activeId);
+export function IssueRail({ segments, activeId, onSelect }: IssueRailProps) {
+  const ordered = transcriptInVideoOrder(segments);
+  const activeIndex = videoOrderIndex(activeId, segments);
 
   return (
     <nav aria-label="Friction points" className="mt-4">
@@ -20,11 +21,11 @@ export function IssueRail({ activeId, onSelect }: IssueRailProps) {
           Friction points
         </span>
         <span className="font-mono text-[10px] text-text-muted">
-          {activeIndex + 1} / {segments.length}
+          {activeIndex + 1} / {ordered.length}
         </span>
       </div>
       <ol className="flex gap-2">
-        {segments.map((seg, index) => {
+        {ordered.map((seg, index) => {
           const isActive = seg.id === activeId;
           const pillar = PILLARS[seg.pillar];
           return (
